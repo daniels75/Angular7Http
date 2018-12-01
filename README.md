@@ -1,8 +1,9 @@
 # Http
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.1.
-## Importent
-Please see -> you-tube-search.service.ts
+
+## Important examples
+Http with Observable -> you-tube-search.service.ts
 
 
 ## Install packages
