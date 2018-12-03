@@ -41,11 +41,21 @@ export class SearchBoxComponent implements OnInit {
       .debounceTime(1000)                         // only once every 250ms
       .do(() => this.loading.emit(true))         // enable loading
       // search, discarding old events if new input comes in
-      .map((query: string) => this.youtube.search(query))
+      .map((query: string) => {
+        // here result is an Observable object
+        let result: any = this.youtube.search(query);
+        result
+      .subscribe(
+          (youTubeResult: any) => {
+            console.log('result: ', youTubeResult);
+          }
+        );
+        return result;
+      })
       .switch()
       // act on the return of the search
       .subscribe(
-        (results: SearchResult[]) => { // on sucesss
+        (results: any) => { // on sucesss
           this.loading.emit(false);
           this.results.emit(results);
         },
@@ -57,5 +67,10 @@ export class SearchBoxComponent implements OnInit {
           this.loading.emit(false);
         }
       );
+
+/*  .subscribe(
+      (value: SearchResult[]) => {console.log(value)},
+      (error:any) => console.log(error),
+      ()=> console.log("complete"))*/
   }
 }

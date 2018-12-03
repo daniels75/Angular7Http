@@ -48,8 +48,9 @@ export class YouTubeSearchService {
     // where we have 2 observable
     let getObs: Observable<any> = this.http.get(queryUrl);
     let responseObs: Observable<SearchResult[]> = getObs.map((res:any) => {
-        // here res['items'] is an Observer with SearchResult[]
-        // without res['items'] it will not work since  then
+        // here res['items'] is results from an Observer transformed
+        // from items into SearchResult[]
+        // without return res['items'] it will not work since  then
         // it will be an Observable<void>
       console.log('>>>> test1');
       let map =  res['items'].map(item => {
@@ -91,6 +92,21 @@ export class YouTubeSearchService {
       });
     });
 
-    return responseObs;
+    // uncomment it - same as the return below
+    // return responseObs;
+
+    return this.http.get(queryUrl).map(response => {
+      return <any>response['items'].map(item => {
+        // console.log("raw item", item); // uncomment if you want to debug
+        return new SearchResult({
+          id: item.id.videoId,
+          title: item.snippet.title,
+          description: item.snippet.description,
+          thumbnailUrl: item.snippet.thumbnails.high.url
+        });
+      });
+    });
+
+
   }
 }
